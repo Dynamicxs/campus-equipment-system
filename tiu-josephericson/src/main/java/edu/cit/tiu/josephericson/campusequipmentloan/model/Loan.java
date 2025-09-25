@@ -28,6 +28,7 @@ public class Loan {
 
     @NotBlank
     private String status;
+    private Double penaltyFee = 0.0;
 
     // Getters and Setters
 

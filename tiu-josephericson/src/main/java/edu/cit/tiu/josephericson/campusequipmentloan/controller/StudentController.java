@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/Student")
+@RequestMapping("/api/student")
 public class StudentController {
 
     private final StudentRepository studentRepository;
@@ -47,5 +47,3 @@ public class StudentController {
         return ResponseEntity.notFound().build();
     }
 }
-
-// Additional methods (getById, update, delete) can be added similarly

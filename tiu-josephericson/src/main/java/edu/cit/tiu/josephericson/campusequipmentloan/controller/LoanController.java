@@ -1,16 +1,19 @@
 package edu.cit.tiu.josephericson.campusequipmentloan.controller;
 
+import edu.cit.tiu.josephericson.campusequipmentloan.model.Equipment;
 import edu.cit.tiu.josephericson.campusequipmentloan.model.Loan;
 import edu.cit.tiu.josephericson.campusequipmentloan.repository.LoanRepository;
 import edu.cit.tiu.josephericson.campusequipmentloan.service.LoanService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+
 @RestController
-@RequestMapping("/Loan")
+@RequestMapping("/api/loans")
 public class LoanController {
 
     private final LoanRepository loanRepository;
@@ -23,7 +26,29 @@ public class LoanController {
 
     @GetMapping
     public List<Loan> getAll() {
-        return loanRepository.findAll();
+        return loanService.getAllLoans();
+    }
+    @GetMapping("/{id}/penalty")
+    public ResponseEntity<Double> getPenalty(@PathVariable Long id) {
+        try {
+            double penalty = loanService.calculatePenalty(id);
+            return ResponseEntity.ok(penalty);
+        } catch (ResponseStatusException ex) {
+            if (ex.getStatusCode().is4xxClientError()) {
+                return ResponseEntity.notFound().build();
+            }
+            throw ex;
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<Loan> create(@Valid @RequestBody Loan loan) {
+        try {
+            Loan savedLoan = loanService.createLoan(loan);
+            return ResponseEntity.ok(savedLoan);
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
 
@@ -49,5 +74,4 @@ public class LoanController {
         return ResponseEntity.notFound().build();
     }
 
-    // Additional methods (getById, update, delete) can be added similarly
 }

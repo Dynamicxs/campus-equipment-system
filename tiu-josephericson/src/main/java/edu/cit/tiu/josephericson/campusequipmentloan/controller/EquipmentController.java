@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/Equipment")
+@RequestMapping("/api/equipment")
 public class EquipmentController {
 
     private final EquipmentRepository equipmentRepository;
@@ -28,7 +28,6 @@ public class EquipmentController {
         return ResponseEntity.ok(equipmentRepository.save(equipment));
     }
 
-    // Additional methods (getById, update, delete) can be added similarly
 
     @PutMapping("/{id}")
     public ResponseEntity<Equipment> update(@PathVariable Long id, @Valid @RequestBody Equipment updated) {
